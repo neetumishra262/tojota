@@ -17,7 +17,6 @@ Get, parse and print driving statistics from MyT API
 import argparse
 import logging
 import sys
-
 import pendulum
 
 from tojota import Myt
@@ -119,7 +118,7 @@ def parse_yearly_driving_statistics(data):
     data = data['summary']
     # totalFuelConsumedInL in yearly statistics seems to be l/100 km, not total liters.
     try:
-        print('EV: {:.1f}/{:.1f} km, {:.0f}%, avg speed: {:.0f} km/h, max speed: {:.0f} km/h, trips/night count: {}/{}, fuel consumption: {:.2f} l/100 km'.
+        print('EV: {:.1f}/{:.1f} km, {:.0f}%, avg speed: {:.0f} km/h, max speed: {:.0f} km/h, trips/night count: {}/{}, fuel usage: {:.2f} l/100 km'.
               format(data['evDistanceInKm'],
                      data['totalDistanceInKm'], data['evDistancePercentage'],
                      data['averageSpeedInKmph'], data['maxSpeedInKmph'],
@@ -133,7 +132,7 @@ def parse_yearly_driving_statistics(data):
                      data['totalFuelConsumedInL']))
 
 
-def main():
+def statistics_main():
     """
     Get, parse and print driving statistics from MyT API
     :return:
@@ -156,6 +155,7 @@ def main():
 
     try:
         data, fresh = myt.get_driving_statistics(from_date, interval)
+        log.info(fresh)
     except ValueError:
         log.info('Failed to use cached token, doing fresh login...')
         myt.login()
@@ -169,4 +169,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(statistics_main())

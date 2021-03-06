@@ -3,3 +3,7 @@ good-names=_,e,i,l,ls,r,f
 
 [FORMAT]
 max-line-length=130
+
+[MASTER]
+disable=
+    C0114, # missing-module-docstring

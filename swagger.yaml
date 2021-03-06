@@ -1,0 +1,90 @@
+---
+  swagger: "2.0"
+  info:
+    version: 0.0.1
+    title: "Toyota"
+  basePath: "/v1/toyota"
+  schemes:
+  - "http"
+  consumes:
+  - "application/json"
+  
+  paths:
+    /trips:
+      get:
+        description: "fetch trips array with existing user_info"
+        operationId: "get_tojota_main"
+        produces:
+          - "plain/text"
+        parameters: []
+        responses:
+          200:
+            description: "Success response received."
+            schema:
+              $ref: "#/definitions/readyResponse"
+          401:
+            description: "Invalid login credentials"
+            schema:
+              $ref: "#/definitions/errorResponse"
+          503:
+            description: "Service not ready"
+            schema:
+              $ref: "#/definitions/errorResponse"
+        x-swagger-router-controller: "tojota"
+  
+    /statistics:
+      get:
+        description: "Get, parse and print driving statistics from MyT API"
+        operationId: "statistics_main"
+        produces:
+          - "plain/text"
+        parameters: []
+        responses:
+          200:
+            description: "Service ready"
+            schema:
+              $ref: "#/definitions/readyResponse"
+          401:
+            description: "Invalid login credentials"
+            schema:
+              $ref: "#/definitions/errorResponse"
+          503:
+            description: "Service not ready"
+            schema:
+              $ref: "#/definitions/errorResponse"
+        x-swagger-router-controller: "statistics"
+  
+  definitions:
+    errorResponse:
+      allOf:
+      - $ref: "#/definitions/serviceListResponse"
+    serviceListResponse:
+      type: "object"
+      properties:
+        results:
+          $ref: '#/definitions/serviceHealthInfo'
+    serviceHealthInfo:
+      type: "object"
+      properties:
+        name:
+          type: string
+          description: "Name of the service"
+        url:
+          type: string
+          description: "service url"
+        status:
+          type: integer
+          description: "HTTP status of service"
+          example: 200
+    readyResponse:
+      type: "object"
+      properties:
+        ready:
+          type: "boolean"
+          description: "Whether the service is ready"
+          example: "True"
+        services:
+          type: array
+          items:
+            $ref: '#/definitions/serviceHealthInfo'
+  
