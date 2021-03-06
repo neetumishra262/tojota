@@ -7,7 +7,7 @@ RUN groupadd -r toyota && \
 
 WORKDIR /app/
 
-COPY requirements.txt src /app/
+COPY requirements.txt src main.py swagger.yaml /app/
 ARG PYTHONPATH=/app/
 
 RUN chmod +x ./main.py
@@ -16,5 +16,7 @@ RUN chmod +x ./main.py
 RUN pip install --no-cache-dir -r requirements.txt
 
 USER toyota
+
+EXPOSE 8090
 
 CMD [ "./main.py" ]
